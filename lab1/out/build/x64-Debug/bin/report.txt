@@ -1,0 +1,4 @@
+File 'file.bin'
+1 Kirill 12 36
+2 Daniil 2 6
+4 Oleg 23 69
