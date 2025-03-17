@@ -21,13 +21,13 @@ DWORD WINAPI MinMaxThreadProc(LPVOID lpParam) {
             data->min_value = data->array[i];
             data->min_index = i;
         }
-        Sleep(7); // Sleep 7 milliseconds after each comparison
+        Sleep(7);
         
         if (data->array[i] > data->max_value) {
             data->max_value = data->array[i];
             data->max_index = i;
         }
-        Sleep(7); // Sleep 7 milliseconds after each comparison
+        Sleep(7);
     }
     
     std::cout << "Min-Max Thread: Minimum value = " << data->min_value 
@@ -50,7 +50,7 @@ DWORD WINAPI AverageThreadProc(LPVOID lpParam) {
     int sum = 0;
     for (size_t i = 0; i < data->array.size(); ++i) {
         sum += data->array[i];
-        Sleep(12); // Sleep 12 milliseconds after each addition
+        Sleep(12);
     }
     
     data->avg_value = static_cast<double>(sum) / data->array.size();
@@ -60,14 +60,13 @@ DWORD WINAPI AverageThreadProc(LPVOID lpParam) {
 }
 
 bool ProcessArray(SharedData& data) {
-    // Create min_max thread
     HANDLE hMinMax = CreateThread(
-        NULL,                   // Default security attributes
-        0,                      // Default stack size
-        MinMaxThreadProc,       // Thread function
-        &data,                  // Parameter to thread function
-        0,                      // Run immediately
-        NULL                    // Thread identifier (not needed)
+        NULL,                   
+        0,                      
+        MinMaxThreadProc,       
+        &data,                  
+        0,                     
+        NULL                   
     );
     
     if (hMinMax == NULL) {
@@ -75,14 +74,13 @@ bool ProcessArray(SharedData& data) {
         return false;
     }
     
-    // Create average thread
     HANDLE hAverage = CreateThread(
-        NULL,                   // Default security attributes
-        0,                      // Default stack size
-        AverageThreadProc,      // Thread function
-        &data,                  // Parameter to thread function
-        0,                      // Run immediately
-        NULL                    // Thread identifier (not needed)
+        NULL,                   
+        0,                      
+        AverageThreadProc,      
+        &data,                  
+        0,                      
+        NULL                    
     );
     
     if (hAverage == NULL) {
@@ -91,21 +89,17 @@ bool ProcessArray(SharedData& data) {
         return false;
     }
     
-    // Wait for min_max and average threads to complete
     WaitForSingleObject(hMinMax, INFINITE);
     WaitForSingleObject(hAverage, INFINITE);
     
-    // Close thread handles
     CloseHandle(hMinMax);
     CloseHandle(hAverage);
     
-    // Replace min and max elements with average
     ReplaceMinMaxWithAverage(data);
     
     return true;
 }
 
-// These functions are exposed for testing
 void FindMinMax(SharedData& data) {
     MinMaxThreadProc(&data);
 }
@@ -121,4 +115,4 @@ void ReplaceMinMaxWithAverage(SharedData& data) {
     }
 }
 
-} // namespace winapi
+}

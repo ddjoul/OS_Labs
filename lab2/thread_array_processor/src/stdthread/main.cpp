@@ -2,10 +2,8 @@
 #include <iostream>
 
 int main() {
-    // Create data
     stdthread::SharedData data;
     
-    // Step 1: Create an array of integers with size and elements from console
     int size;
     std::cout << "Enter array size: ";
     std::cin >> size;
@@ -22,13 +20,11 @@ int main() {
         std::cin >> data.array[i];
     }
     
-    // Process array with threads
     if (!stdthread::ProcessArray(data)) {
         std::cout << "Error processing array." << std::endl;
         return 1;
     }
     
-    // Print the final modified array
     {
         std::lock_guard<std::mutex> lock(stdthread::consoleMutex);
         std::cout << "Main Thread: Modified array after replacing min and max with average:" << std::endl;

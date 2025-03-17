@@ -5,17 +5,14 @@
 
 namespace stdthread {
 
-// Global mutex for console output
 std::mutex consoleMutex;
 
-// Thread-safe console output implementation
 template<typename T>
 void safe_cout(const T& message) {
     std::lock_guard<std::mutex> lock(consoleMutex);
     std::cout << message << std::endl;
 }
 
-// Explicit template instantiation for strings
 template void safe_cout<std::string>(const std::string& message);
 
 void MinMaxThreadProc(SharedData* data) {
@@ -34,13 +31,13 @@ void MinMaxThreadProc(SharedData* data) {
             data->min_value = data->array[i];
             data->min_index = i;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(7)); // Sleep 7 milliseconds
+        std::this_thread::sleep_for(std::chrono::milliseconds(7));
         
         if (data->array[i] > data->max_value) {
             data->max_value = data->array[i];
             data->max_index = i;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(7)); // Sleep 7 milliseconds
+        std::this_thread::sleep_for(std::chrono::milliseconds(7)); 
     }
     
     safe_cout<std::string>("Min-Max Thread: Minimum value = " + std::to_string(data->min_value) + 
@@ -59,7 +56,7 @@ void AverageThreadProc(SharedData* data) {
     int sum = 0;
     for (size_t i = 0; i < data->array.size(); ++i) {
         sum += data->array[i];
-        std::this_thread::sleep_for(std::chrono::milliseconds(12)); // Sleep 12 milliseconds
+        std::this_thread::sleep_for(std::chrono::milliseconds(12));
     }
     
     data->avg_value = static_cast<double>(sum) / data->array.size();
@@ -68,15 +65,12 @@ void AverageThreadProc(SharedData* data) {
 
 bool ProcessArray(SharedData& data) {
     try {
-        // Create min_max and average threads
         std::thread minMaxThread(MinMaxThreadProc, &data);
         std::thread averageThread(AverageThreadProc, &data);
         
-        // Wait for min_max and average threads to complete
         minMaxThread.join();
         averageThread.join();
         
-        // Replace min and max elements with average
         ReplaceMinMaxWithAverage(data);
         
         return true;
@@ -86,7 +80,6 @@ bool ProcessArray(SharedData& data) {
     }
 }
 
-// These functions are exposed for testing
 void FindMinMax(SharedData& data) {
     MinMaxThreadProc(&data);
 }
@@ -102,4 +95,4 @@ void ReplaceMinMaxWithAverage(SharedData& data) {
     }
 }
 
-} // namespace stdthread
+}
