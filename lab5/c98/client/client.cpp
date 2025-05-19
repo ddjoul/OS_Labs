@@ -71,16 +71,40 @@ void ModifyRecord(HANDLE hPipe) {
         << "Name: " << res.emp_data.name << "\n"
         << "Hours: " << res.emp_data.hours << std::endl;
 
+    employee original = res.emp_data;
+    employee modified = res.emp_data;
+
     std::cout << "Enter new name: ";
-    std::cin >> res.emp_data.name;
+    std::cin >> modified.name;
     std::cout << "Enter new hours: ";
-    std::cin >> res.emp_data.hours;
+    std::cin >> modified.hours;
 
-    req.type = RELEASE_WRITE;
-    req.emp_data = res.emp_data;
-    if (!SendRequest(hPipe, req, res)) return;
+    std::cout << "\nChanges to be made:\n";
+    if (strcmp(original.name, modified.name) != 0) {
+        std::cout << "Name: " << original.name << " -> " << modified.name << "\n";
+    }
+    if (original.hours != modified.hours) {
+        std::cout << "Hours: " << original.hours << " -> " << modified.hours << "\n";
+    }
 
-    std::cout << (res.success ? "Update successful!" : "Update failed!") << std::endl;
+    char confirm;
+    std::cout << "\nConfirm changes? (y/n): ";
+    std::cin >> confirm;
+
+    if (tolower(confirm) == 'y') {
+        req.type = RELEASE_WRITE;
+        req.emp_data = modified;
+        if (!SendRequest(hPipe, req, res)) return;
+
+        std::cout << (res.success ? "Update successful!" : "Update failed!") << std::endl;
+    }
+    else {
+        req.type = RELEASE_WRITE;
+        req.emp_data = original;
+        SendRequest(hPipe, req, res);
+
+        std::cout << "Changes discarded." << std::endl;
+    }
 }
 
 void ReadRecord(HANDLE hPipe) {
