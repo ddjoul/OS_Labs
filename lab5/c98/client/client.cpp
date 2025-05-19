@@ -127,7 +127,6 @@ int main() {
         }
     } while (choice != 3);
 
-    // Уведомляем сервер о завершении
     Request req;
     req.type = CLIENT_EXIT;
     Response res;

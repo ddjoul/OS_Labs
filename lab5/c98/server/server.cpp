@@ -180,7 +180,7 @@ int main() {
                 CloseHandle(hPipe);
             }
             else {
-                CloseHandle(hClientThread); // Мы не будем ждать завершения этого потока
+                CloseHandle(hClientThread);
             }
         }
         else {
@@ -189,12 +189,10 @@ int main() {
         }
     }
 
-    // Ожидаем завершения всех клиентов
     while (activeClients > 0 && serverRunning) {
         Sleep(100);
     }
 
-    // Завершаем работу
     serverRunning = false;
     WaitForSingleObject(hControlThread, INFINITE);
 

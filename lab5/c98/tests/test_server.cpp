@@ -3,7 +3,6 @@
 #include <vector>
 #include <algorithm>
 
-// Функция, аналогичная обработке в server.cpp, но для теста
 bool HandleRequest(Request& req, Response& res, std::vector<employee>& data) {
     res.success = false;
     for (auto& emp : data) {

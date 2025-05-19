@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include "employee.h"
 
-// Проверка сериализации данных запроса
 TEST(ClientLogicTest, RequestDataIntegrity) {
     Request req;
     req.type = WRITE_REQUEST;
@@ -15,7 +14,6 @@ TEST(ClientLogicTest, RequestDataIntegrity) {
     EXPECT_DOUBLE_EQ(req.emp_data.hours, 37.5);
 }
 
-// Проверка успешного получения ответа
 TEST(ClientLogicTest, ResponseSuccess) {
     Response res;
     res.success = true;
